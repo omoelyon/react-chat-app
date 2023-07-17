@@ -11,7 +11,7 @@ function AppRouter() {
 			<ScrollToTop />
 			<Routes>
 				<Route
-					path='/chat'
+					path='/'
 					element={
 						<ProtectedRoute>
 							<ChatRoom />

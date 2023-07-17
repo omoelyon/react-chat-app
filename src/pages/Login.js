@@ -1,10 +1,13 @@
 import { useContext, useState } from 'react'
-import './styles/login.css'
-import { Navigate } from 'react-router-dom'
-import { UserContext } from '../contexts/user-context'
 import { useNavigate } from 'react-router-dom'
+
+import './styles/login.css'
+import { UserContext } from '../contexts/user-context'
+
 import getUserFromLocal from '../utils/get-local-user'
 import saveUserToLocal from '../utils/save-local-user'
+
+import axios from 'axios'
 
 const Login = () => {
 	const [loginData, setLoginData] = useState({
@@ -21,28 +24,34 @@ const Login = () => {
 
 	const loginUser = async (e) => {
 		e.preventDefault()
-		// login to endpoint
+
 		if (loginData.email != '' && loginData.password != '') {
-			const requestOptions = {
+			const options = {
 				method: 'POST',
+				// url: 'http://46.101.67.209/auth/login',
+				url: 'http://localhost:9065/auth/login',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(loginData),
+				data: { email: loginData.email, password: loginData.password },
 			}
 
-			fetch('http://46.101.67.209/auth/login', requestOptions)
-				.then((res) => {
-					console.log(res)
+			axios
+				.request(options)
+				.then((response) => {
+					console.log(response.data)
+
 					// save token to local
-					saveUserToLocal('tokennn')
+					saveUserToLocal(response.data.token)
 
 					// set user context
 					setUser(getUserFromLocal())
 
 					// push to chatroom page
-					navigate('/chat')
+					setTimeout(() => {
+						return navigate('/')
+					}, 1000)
 				})
-				.catch((err) => {
-					console.log(err)
+				.catch((error) => {
+					console.error(error)
 				})
 		}
 	}
