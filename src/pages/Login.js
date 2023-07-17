@@ -40,7 +40,7 @@ const Login = () => {
 					console.log(response.data)
 
 					// save token to local
-					saveUserToLocal(response.data.token)
+					saveUserToLocal(response.data.token, loginData.email)
 
 					// set user context
 					setUser(getUserFromLocal())
