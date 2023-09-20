@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import './styles/login.css'
@@ -14,6 +14,7 @@ const Login = () => {
 		email: '',
 		password: '',
 	})
+	const [token, setToken] = useState('')
 	const { setUser } = useContext(UserContext)
 	const navigate = useNavigate()
 
@@ -37,7 +38,7 @@ const Login = () => {
 			axios
 				.request(options)
 				.then((response) => {
-					console.log(response.data)
+					// console.log(response.data)
 
 					// save token to local
 					saveUserToLocal(response.data.token, loginData.email)
@@ -47,7 +48,7 @@ const Login = () => {
 
 					// push to chatroom page
 					setTimeout(() => {
-						return navigate('/')
+						navigate('/')
 					}, 1000)
 				})
 				.catch((error) => {

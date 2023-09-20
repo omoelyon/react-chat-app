@@ -11,16 +11,20 @@ const ChatRoom = () => {
 		username: JSON.parse(localStorage.getItem('adeola-tk') || '{"email": ""}').email || '',
 		receivername: '',
 		connected: false,
-		message: '',
+		text: '',
 	})
 	useEffect(() => {
 		console.log(userData)
 	}, [userData])
 
 	const connect = () => {
-		let Sock = new SockJS('http://localhost:8700/ws')
+		const {token } = JSON.parse(localStorage.getItem('adeola-tk'))
+		let Sock = new SockJS('http://localhost:9065/inbox/ws?X-Termii-Token='+token, )
+		console.log("trying to connect ===> ",Sock)
 		stompClient = over(Sock)
-		stompClient.connect({}, onConnected, onError)
+		console.log("trying to connect ===> ",stompClient)
+
+		stompClient.connect({"X-Termii-Token":token}, onConnected, onError)
 	}
 
 	const onConnected = () => {
@@ -77,18 +81,18 @@ const ChatRoom = () => {
 
 	const handleMessage = (event) => {
 		const { value } = event.target
-		setUserData({ ...userData, message: value })
+		setUserData({ ...userData, text: value })
 	}
 	const sendValue = () => {
 		if (stompClient) {
 			var chatMessage = {
 				senderName: userData.username,
-				message: userData.message,
+				text: userData.text,
 				status: 'MESSAGE',
 			}
 			console.log(chatMessage)
 			stompClient.send('/app/message', {}, JSON.stringify(chatMessage))
-			setUserData({ ...userData, message: '' })
+			setUserData({ ...userData, text: '' })
 		}
 	}
 
@@ -106,7 +110,7 @@ const ChatRoom = () => {
 				setPrivateChats(new Map(privateChats))
 			}
 			stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage))
-			setUserData({ ...userData, message: '' })
+			setUserData({ ...userData, text: '' })
 		}
 	}
 
@@ -149,9 +153,9 @@ const ChatRoom = () => {
 						<div className='chat-content'>
 							<ul className='chat-messages'>
 								{publicChats.map((chat, index) => (
-									<li className={`message ${chat.senderName === userData.username && 'self'}`} key={index}>
+									<li className={`text ${chat.senderName === userData.username && 'self'}`} key={index}>
 										{chat.senderName !== userData.username && <div className='avatar'>{chat.senderName}</div>}
-										<div className='message-data'>{chat.message}</div>
+										<div className='message-data'>{chat.text}</div>
 										{chat.senderName === userData.username && <div className='avatar self'>{chat.senderName}</div>}
 									</li>
 								))}
@@ -162,7 +166,7 @@ const ChatRoom = () => {
 									type='text'
 									className='input-message'
 									placeholder='enter the message'
-									value={userData.message}
+									value={userData.text}
 									onChange={handleMessage}
 								/>
 								<button type='button' className='send-button' onClick={sendValue}>
@@ -175,9 +179,9 @@ const ChatRoom = () => {
 						<div className='chat-content'>
 							<ul className='chat-messages'>
 								{[...privateChats.get(tab)].map((chat, index) => (
-									<li className={`message ${chat.senderName === userData.username && 'self'}`} key={index}>
+									<li className={`text ${chat.senderName === userData.username && 'self'}`} key={index}>
 										{chat.senderName !== userData.username && <div className='avatar'>{chat.senderName}</div>}
-										<div className='message-data'>{chat.message}</div>
+										<div className='message-data'>{chat.text}</div>
 										{chat.senderName === userData.username && <div className='avatar self'>{chat.senderName}</div>}
 									</li>
 								))}
@@ -188,7 +192,7 @@ const ChatRoom = () => {
 									type='text'
 									className='input-message'
 									placeholder='enter the message'
-									value={userData.message}
+									value={userData.text}
 									onChange={handleMessage}
 								/>
 								<button type='button' className='send-button' onClick={sendPrivateValue}>
