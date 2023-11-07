@@ -11,6 +11,7 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+ node_modules
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -146,7 +147,7 @@ dist
 **/*.backup.*
 **/*.back.*
 
-node_modules
+# node_modules
 
 *.sublime*
 
