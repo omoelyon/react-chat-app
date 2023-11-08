@@ -30,7 +30,7 @@ const Login = () => {
 			const options = {
 				method: 'POST',
 				// url: 'http://46.101.67.209/auth/login',
-				url: 'http://localhost:9065/auth/login',
+				url: 'https://account-staging.termii.com/auth/login',
 				headers: { 'Content-Type': 'application/json' },
 				data: { email: loginData.email, password: loginData.password },
 			}

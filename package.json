@@ -17,11 +17,7 @@
     "stompjs": "^2.3.3",
     "web-vitals": "^2.1.2"
   },
-<<<<<<< HEAD
-  "proxy": "http://localhost:9065",
-=======
-  "proxy": "http://localhost:9065/inbox",
->>>>>>> b5398b7d71847af6c3b741af1c21dad05973127a
+  "proxy": "https://account-staging.termii.com/inbox/websocket/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
